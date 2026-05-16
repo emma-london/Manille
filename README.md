@@ -1,4 +1,5 @@
 A card game for two people
+
 NB written in 2014 - it isn't up to current coding standards yet! 
 
 This was a favourite of my Father's. I have no idea how he found it becuase it's native to
