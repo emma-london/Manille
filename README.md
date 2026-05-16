@@ -16,3 +16,5 @@ Some imporant points
 * Winning - based on points (see values) for the tricks you win.
     You add points for all cards in a trick. If you win a trick by playing A over their Q you get 6 (4 for your A and 2 for the opps 2)
     There are 60 total points in the short deck - winning is >30
+
+NB I wrote this in 2014 - it isn't up to date yet. 
