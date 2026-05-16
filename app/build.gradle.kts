@@ -31,8 +31,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.constraintlayout)
     // The original project did not actually use any android.support.* APIs,
-    // so no AndroidX dependencies are required. Uncomment if you later
-    // need AppCompat features.
+    // so AppCompat is optional. Uncomment if you later need AppCompat features.
     // implementation(libs.androidx.appcompat)
 }

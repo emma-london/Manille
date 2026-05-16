@@ -17,4 +17,32 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <!--
+        Card-image styles used in activity_manille.xml.
+
+        Each card sits in a horizontal LinearLayout row whose height is set by
+        the outer ConstraintLayout vertical chain. Cards take a fractional
+        slice of the row width (weight=1) and fill the row height; the
+        default scaleType="fitCenter" preserves the card image's aspect
+        ratio inside the slot. HandCard and TableCard differ only in their
+        horizontal margins (and indirectly in size, because the rows they
+        live in have different vertical weights in the parent chain).
+    -->
+    <style name="GameCard">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="HandCard" parent="GameCard">
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+    </style>
+
+    <style name="TableCard" parent="GameCard">
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+    </style>
+
 </resources>

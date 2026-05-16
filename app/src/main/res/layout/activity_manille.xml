@@ -1,19 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Manille game board.
+
+    Vertical layout (same on portrait and landscape):
+       [ status bar (Score: N)            ]
+       [ opponent hand   (8 cards)        ]   vweight 1.0
+       [ opponent table  (4 cards)        ]   vweight 1.3
+       [ play row (trumps | p1 | p2 | turn) ] vweight 1.7
+       [ my table        (4 cards)        ]   vweight 1.3
+       [ my hand         (8 cards)        ]   vweight 1.0
+
+    Cards use width=0dp + horizontal weight inside each row, and
+    height=match_parent. ImageView's default scaleType=fitCenter
+    preserves the card aspect ratio inside each weighted slot, so
+    cards scale together as the screen size or orientation changes.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#007000"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ManilleActivity" >
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".ManilleActivity">
 
+    <!-- ====== Status bar (Score) ====== -->
     <LinearLayout
         android:id="@+id/statusbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" >
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView1"
@@ -27,309 +48,270 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-
     </LinearLayout>
 
+    <!-- ====== Opponent hand (8 cards) ====== -->
     <LinearLayout
         android:id="@+id/opp_hand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/statusbar"
-        android:orientation="horizontal" >
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/opp_table"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statusbar"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintVertical_weight="1.0">
 
         <ImageView
             android:id="@+id/IVOppHand1"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand2"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand3"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand4"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand5"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand6"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand7"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppHand8"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
-
     </LinearLayout>
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_below="@id/opp_hand" />
-
+    <!-- ====== Opponent table (4 cards) ====== -->
     <LinearLayout
         android:id="@+id/opp_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/view2"
-        android:orientation="horizontal" >
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/play_cards"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/opp_hand"
+        app:layout_constraintVertical_weight="1.3">
 
         <ImageView
             android:id="@+id/IVOppTable1"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppTable2"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppTable3"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVOppTable4"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
-
     </LinearLayout>
 
+    <!-- ====== Play row: trumps | play1 | play2 | turn indicator ====== -->
     <LinearLayout
         android:id="@+id/play_cards"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal" >
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/my_table"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/opp_table"
+        app:layout_constraintVertical_weight="1.7">
 
+        <!-- Trumps column: label + small card -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical" >
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/TextView01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_weight="1"
                 android:text="@string/Trumps"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <ImageView
                 android:id="@+id/IVTrumps"
-                android:layout_width="22dp"
-                android:layout_height="26dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:src="@drawable/card_blank" />
         </LinearLayout>
 
+        <!-- Play 1 -->
         <ImageView
             android:id="@+id/IVPlay1"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_marginHorizontal="4dp"
             android:src="@drawable/card_blank" />
 
-        <View
-            android:id="@+id/view3"
-            android:layout_width="50dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
+        <!-- Play 2 -->
         <ImageView
             android:id="@+id/IVPlay2"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_marginHorizontal="4dp"
             android:src="@drawable/card_blank" />
 
+        <!-- Turn indicator column: opp arrow + "To Play" + my arrow -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/IVTurnOpp"
-                android:layout_width="46dp"
-                android:layout_height="16dp"
-                android:layout_gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
                 android:src="@drawable/uparrow" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:text="@string/ToPlay"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <ImageView
                 android:id="@+id/IVTurnMy"
-                android:layout_width="46dp"
-                android:layout_height="16dp"
-                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
                 android:src="@drawable/downarrow" />
-
         </LinearLayout>
-
     </LinearLayout>
 
+    <!-- ====== My table (4 cards) ====== -->
     <LinearLayout
         android:id="@+id/my_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/view1"
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal" >
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/my_hand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/play_cards"
+        app:layout_constraintVertical_weight="1.3">
 
         <ImageView
             android:id="@+id/IVMyTable1"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyTable2"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyTable3"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyTable4"
-            android:layout_width="40dp"
-            android:layout_height="51dp"
-            android:layout_weight="1"
+            style="@style/TableCard"
             android:src="@drawable/card_blank" />
-
     </LinearLayout>
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_above="@+id/my_hand"
-        android:layout_alignParentLeft="true" />
-
+    <!-- ====== My hand (8 cards) ====== -->
     <LinearLayout
         android:id="@+id/my_hand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal" >
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/my_table"
+        app:layout_constraintVertical_weight="1.0">
 
         <ImageView
             android:id="@+id/IVMyHand1"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand2"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand3"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand4"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand5"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand6"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand7"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
 
         <ImageView
             android:id="@+id/IVMyHand8"
-            android:layout_width="30dp"
-            android:layout_height="38dp"
-            android:layout_weight="1"
+            style="@style/HandCard"
             android:src="@drawable/card_blank" />
-
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

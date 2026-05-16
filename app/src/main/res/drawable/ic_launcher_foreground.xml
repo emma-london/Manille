@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Card Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M33,28h42c2.76,0 5,2.24 5,5v42c0,2.76 -2.24,5 -5,5h-42c-2.76,0 -5,-2.24 -5,-5v-42c0,-2.76 2.24,-5 5,-5z" />
+    <!-- Heart Suit -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M54,45c-2,-4 -8,-4 -8,2c0,4 8,10 8,10s8,-6 8,-10c0,-6 -6,-6 -8,-2z" />
+</vector>
