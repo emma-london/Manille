@@ -22,8 +22,8 @@ Some imporant points
 
 There are two areas controlled by the player (and the same two for the opps)
 
-Hand cards (botttom) - 8 initially, not visible to the opps
-Table cards - 8. Consisting of 4 visible, each covers an under card. As the game starts, 4 are visible. When a visible card is played the under card is turned up and made visible on the table to both players. 
+Hand cards (8 of them, botttom of the screen on the app) - 8 initially, not visible to the opps
+Table cards (4 of them, above the hand cards on the app) - 4+4. Consisting of 4 visible, but each covers an under card. As the game starts, 4 top cards are visible. When a visible card is played the card underneath is turned up and made visible on the table (to both players.) 
 
 Play
 Players can play any card from their hand or their (visible) table cards. They must follow the rules above re suit, winning etc....
