@@ -28,3 +28,13 @@ Table cards (4 of them, above the hand cards on the app) - 4+4. Consisting of 4 
 Play
 Players can play any card from their hand or their (visible) table cards. They must follow the rules above re suit, winning etc....
 
+
+
+App todo:
+* The AI is awful, it knows the rules but chooses what card to play randomly.
+* Layout - I've done some work converting it, but it needs more.
+* Card designs - the spades & clubs are difficult to tell apart. IDK what to do with this, the hand cards on a phone in portrait means there isn't much space
+* Different levels of AI.... I could write an opponent that would be difficult to beat, I havent't yet. When I do I'll name it PJB after my Dad - it was near impossible to beat him!
+
+
+If you recognise this game please reach out! I would love to hear about people using it
