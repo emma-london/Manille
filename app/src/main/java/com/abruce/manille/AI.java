@@ -1,12 +1,22 @@
 package com.abruce.manille;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class AI
 {
     // -------------------------------------------------------------------------
     // Template methods — handle mechanics; delegate card selection to subclasses
     // -------------------------------------------------------------------------
+
+    /**
+     * Choose the trump suit.  Stub implementation — picks randomly.
+     * Subclasses can override to use smarter logic.
+     */
+    public int chooseTrumps()
+    {
+        return new Random().nextInt(4);
+    }
 
     public final Card lead()
     {

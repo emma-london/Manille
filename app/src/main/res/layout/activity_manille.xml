@@ -106,6 +106,15 @@
     </LinearLayout>
 
     <!-- ====== Opponent table (4 cards) ====== -->
+    <!--
+        Each slot is a FrameLayout holding two ImageViews:
+          Bottom (IVOppTableNBottom): face-down card, offset 6dp right+down to peek behind top
+          Top    (IVOppTableNTop):    face-up card, sits flush at top-left of the frame
+        States:
+          1. Pair   — bottom VISIBLE (cardback), top VISIBLE (face card)
+          2. Single — bottom GONE,               top VISIBLE (face card)
+          3. Empty  — bottom GONE,               top shows card_blank (or GONE)
+    -->
     <LinearLayout
         android:id="@+id/opp_table"
         android:layout_width="0dp"
@@ -118,113 +127,255 @@
         app:layout_constraintTop_toBottomOf="@id/opp_hand"
         app:layout_constraintVertical_weight="1.3">
 
-        <ImageView
-            android:id="@+id/IVOppTable1"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVOppTable1Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVOppTable1Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/IVOppTable2"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVOppTable2Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVOppTable2Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/IVOppTable3"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVOppTable3Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVOppTable3Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/IVOppTable4"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVOppTable4Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVOppTable4Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
     </LinearLayout>
 
     <!-- ====== Play row: trumps | play1 | play2 | turn indicator ====== -->
-    <LinearLayout
+    <!--
+        FrameLayout hosts two mutually exclusive children:
+          play_row_normal  — shown during normal play
+          trump_picker     — shown when the player must choose the trump suit
+    -->
+    <FrameLayout
         android:id="@+id/play_cards"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/my_table"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/opp_table"
         app:layout_constraintVertical_weight="1.7">
 
-        <!-- Trumps column: label + small card -->
+        <!-- Normal play row -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/play_row_normal"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/TextView01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Trumps"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageView
-                android:id="@+id/IVTrumps"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+            <!-- Trumps column: label + small card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TextView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Trumps"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageView
+                    android:id="@+id/IVTrumps"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/card_blank" />
+            </LinearLayout>
+
+            <!-- Play 1 -->
+            <ImageView
+                android:id="@+id/IVPlay1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_marginHorizontal="4dp"
                 android:src="@drawable/card_blank" />
+
+            <!-- Play 2 -->
+            <ImageView
+                android:id="@+id/IVPlay2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_marginHorizontal="4dp"
+                android:src="@drawable/card_blank" />
+
+            <!-- Turn indicator column: opp arrow + "To Play" + my arrow -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/IVTurnOpp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/uparrow" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ToPlay"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageView
+                    android:id="@+id/IVTurnMy"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/downarrow" />
+            </LinearLayout>
         </LinearLayout>
 
-        <!-- Play 1 -->
-        <ImageView
-            android:id="@+id/IVPlay1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:layout_marginHorizontal="4dp"
-            android:src="@drawable/card_blank" />
-
-        <!-- Play 2 -->
-        <ImageView
-            android:id="@+id/IVPlay2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:layout_marginHorizontal="4dp"
-            android:src="@drawable/card_blank" />
-
-        <!-- Turn indicator column: opp arrow + "To Play" + my arrow -->
+        <!-- Trump picker — visible only during trump selection -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/trump_picker"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:orientation="vertical"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/IVTurnOpp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:src="@drawable/uparrow" />
+            android:visibility="gone">
 
             <TextView
-                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ToPlay"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/ChooseTrumps"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="8dp" />
 
-            <ImageView
-                android:id="@+id/IVTurnMy"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:src="@drawable/downarrow" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/IVSuit0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/suit0" />
+
+                <ImageView
+                    android:id="@+id/IVSuit1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/suit1" />
+
+                <ImageView
+                    android:id="@+id/IVSuit2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/suit2" />
+
+                <ImageView
+                    android:id="@+id/IVSuit3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/suit3" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </FrameLayout>
 
     <!-- ====== My table (4 cards) ====== -->
     <LinearLayout
@@ -239,25 +390,89 @@
         app:layout_constraintTop_toBottomOf="@id/play_cards"
         app:layout_constraintVertical_weight="1.3">
 
-        <ImageView
-            android:id="@+id/IVMyTable1"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVMyTable1Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVMyTable1Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/IVMyTable2"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVMyTable2Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVMyTable2Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/IVMyTable3"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVMyTable3Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVMyTable3Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/IVMyTable4"
-            style="@style/TableCard"
-            android:src="@drawable/card_blank" />
+        <FrameLayout
+            style="@style/TableCard">
+            <ImageView
+                android:id="@+id/IVMyTable4Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cardback"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/IVMyTable4Top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/card_blank" />
+        </FrameLayout>
     </LinearLayout>
 
     <!-- ====== My hand (8 cards) ====== -->

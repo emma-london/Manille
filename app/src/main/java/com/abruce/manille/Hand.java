@@ -13,11 +13,12 @@ public class Hand
 	private Card[] faceUp;
 
 	private ImageView[] handIV;
-	private ImageView[] tableIV;
+	private ImageView[] tableTopIV;    // face-up card (top of stack)
+	private ImageView[] tableBottomIV; // face-down card (bottom of stack, peeks behind top)
 
 	private boolean visible;
 
-	public Hand(ImageView[] h, ImageView[] t, boolean v)
+	public Hand(ImageView[] h, ImageView[] tTop, ImageView[] tBottom, boolean v)
 	{
 		hand = new ArrayList<Card>();
 		faceDown = new Card[4];
@@ -25,7 +26,8 @@ public class Hand
 		visible = v;
 
 		handIV = h;
-		tableIV = t;
+		tableTopIV = tTop;
+		tableBottomIV = tBottom;
 
 		for(int i=0; i<8; i++)
 		{
@@ -45,7 +47,10 @@ public class Hand
 			faceDown[i] = new Card();
 			faceUp[i] = new Card();
 
-			tableIV[i].setImageDrawable(faceUp[i].getDrawable());
+			// State 1: pair — bottom shows card back, top shows face-up card
+			tableBottomIV[i].setImageDrawable(Card.getCardBack());
+			tableBottomIV[i].setVisibility(android.view.View.VISIBLE);
+			tableTopIV[i].setImageDrawable(faceUp[i].getDrawable());
 		}
 
 	}
@@ -86,27 +91,30 @@ public class Hand
 
 		if (table)
 		{
-			c=faceUp[card];
-			if(faceDown[card] == null)
+			c = faceUp[card];
+			if (faceDown[card] == null)
 			{
-				//There isn't an under card in this spot.
-				tableIV[card].setImageDrawable(Card.getCardBlank());
+				// State 3: both cards gone — show blank, hide bottom
+				tableTopIV[card].setImageDrawable(Card.getCardBlank());
+				tableBottomIV[card].setVisibility(android.view.View.GONE);
 				faceUp[card] = null;
 			}
 			else
 			{
+				// State 2: under-card revealed — flip faceDown to faceUp, hide bottom
 				faceUp[card] = faceDown[card];
 				faceDown[card] = null;
-				tableIV[card].setImageDrawable(faceUp[card].getDrawable());
+				tableTopIV[card].setImageDrawable(faceUp[card].getDrawable());
+				tableBottomIV[card].setVisibility(android.view.View.GONE);
 			}
 		}
 		else
 		{
 			c = hand.remove(card);
-			//Is the cards are user cards (visible) we need to shuffle the imageviews along.
-			if(visible)
+			//If the cards are user cards (visible) we need to shuffle the imageviews along.
+			if (visible)
 			{
-				for (int i=card; i< hand.size(); i++)
+				for (int i = card; i < hand.size(); i++)
 				{
 					//We need to shuffle along the cards from this point to the end.
 					handIV[i].setImageDrawable(hand.get(i).getDrawable());

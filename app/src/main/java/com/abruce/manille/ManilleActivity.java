@@ -23,9 +23,11 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 	private Hand oppHand;
 
 	private ImageView[] myHandIVs;
-	private ImageView[] myTableIVs;
+	private ImageView[] myTableTopIVs;
+	private ImageView[] myTableBottomIVs;
 	private ImageView[] oppHandIVs;
-	private ImageView[] oppTableIVs;
+	private ImageView[] oppTableTopIVs;
+	private ImageView[] oppTableBottomIVs;
 
 	private ImageView myPlayedIV;
 	private ImageView oppPlayedIV;
@@ -39,6 +41,13 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 	private int trumpSuit;
 	private boolean myTurn;  //Who plays next - true = player, false = opponent
 	private boolean myLead;  //Who lead for this trick - true = player
+	private boolean choosingTrumps;  //True while the player is picking the trump suit
+
+	private static final String[] SUIT_NAMES = {"Hearts", "Diamonds", "Clubs", "Spades"};
+
+	private View trumpPickerView;
+	private View playRowNormal;
+	private ImageView[] suitIVs;
 
 	private int myScore;
 	private int oppScore;
@@ -78,6 +87,12 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 	@Override
 	public void onClick(View v)
 	{
+		if (choosingTrumps)
+		{
+			Toast.makeText(getApplicationContext(), "Choose the trump suit first", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		if (!myTurn)
 		{
 			Toast.makeText(getApplicationContext(), "Not your turn", Toast.LENGTH_SHORT).show();
@@ -99,7 +114,7 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 		int card=-1;
 
 
-		//R.id.IVMyHand1-8, R.id.IVMyTable1-4:
+		//R.id.IVMyHand1-8, R.id.IVMyTable1Top-4Top:
 		int id = v.getId();
 
 		if (id == R.id.IVMyHand1) {
@@ -126,16 +141,16 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 		} else if (id == R.id.IVMyHand8) {
 			table = false;
 			card = 7;
-		} else if (id == R.id.IVMyTable1) {
+		} else if (id == R.id.IVMyTable1Top) {
 			table = true;
 			card = 0;
-		} else if (id == R.id.IVMyTable2) {
+		} else if (id == R.id.IVMyTable2Top) {
 			table = true;
 			card = 1;
-		} else if (id == R.id.IVMyTable3) {
+		} else if (id == R.id.IVMyTable3Top) {
 			table = true;
 			card = 2;
-		} else if (id == R.id.IVMyTable4) {
+		} else if (id == R.id.IVMyTable4Top) {
 			table = true;
 			card = 3;
 		}
@@ -227,10 +242,12 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 	private void setupIVs()
 	{
 		myHandIVs = new ImageView[8];
-		myTableIVs = new ImageView[4];
+		myTableTopIVs = new ImageView[4];
+		myTableBottomIVs = new ImageView[4];
 
 		oppHandIVs = new ImageView[8];
-		oppTableIVs = new ImageView[4];
+		oppTableTopIVs = new ImageView[4];
+		oppTableBottomIVs = new ImageView[4];
 
 		myHandIVs[0] = (ImageView)findViewById(R.id.IVMyHand1);
 		myHandIVs[1] = (ImageView)findViewById(R.id.IVMyHand2);
@@ -241,10 +258,15 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 		myHandIVs[6] = (ImageView)findViewById(R.id.IVMyHand7);
 		myHandIVs[7] = (ImageView)findViewById(R.id.IVMyHand8);
 
-		myTableIVs[0] = (ImageView)findViewById(R.id.IVMyTable1);
-		myTableIVs[1] = (ImageView)findViewById(R.id.IVMyTable2);
-		myTableIVs[2] = (ImageView)findViewById(R.id.IVMyTable3);
-		myTableIVs[3] = (ImageView)findViewById(R.id.IVMyTable4);
+		myTableTopIVs[0] = (ImageView)findViewById(R.id.IVMyTable1Top);
+		myTableTopIVs[1] = (ImageView)findViewById(R.id.IVMyTable2Top);
+		myTableTopIVs[2] = (ImageView)findViewById(R.id.IVMyTable3Top);
+		myTableTopIVs[3] = (ImageView)findViewById(R.id.IVMyTable4Top);
+
+		myTableBottomIVs[0] = (ImageView)findViewById(R.id.IVMyTable1Bottom);
+		myTableBottomIVs[1] = (ImageView)findViewById(R.id.IVMyTable2Bottom);
+		myTableBottomIVs[2] = (ImageView)findViewById(R.id.IVMyTable3Bottom);
+		myTableBottomIVs[3] = (ImageView)findViewById(R.id.IVMyTable4Bottom);
 
 		oppHandIVs[0] = (ImageView)findViewById(R.id.IVOppHand1);
 		oppHandIVs[1] = (ImageView)findViewById(R.id.IVOppHand2);
@@ -255,58 +277,109 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 		oppHandIVs[6] = (ImageView)findViewById(R.id.IVOppHand7);
 		oppHandIVs[7] = (ImageView)findViewById(R.id.IVOppHand8);
 
-		oppTableIVs[0] = (ImageView)findViewById(R.id.IVOppTable1);
-		oppTableIVs[1] = (ImageView)findViewById(R.id.IVOppTable2);
-		oppTableIVs[2] = (ImageView)findViewById(R.id.IVOppTable3);
-		oppTableIVs[3] = (ImageView)findViewById(R.id.IVOppTable4);
+		oppTableTopIVs[0] = (ImageView)findViewById(R.id.IVOppTable1Top);
+		oppTableTopIVs[1] = (ImageView)findViewById(R.id.IVOppTable2Top);
+		oppTableTopIVs[2] = (ImageView)findViewById(R.id.IVOppTable3Top);
+		oppTableTopIVs[3] = (ImageView)findViewById(R.id.IVOppTable4Top);
+
+		oppTableBottomIVs[0] = (ImageView)findViewById(R.id.IVOppTable1Bottom);
+		oppTableBottomIVs[1] = (ImageView)findViewById(R.id.IVOppTable2Bottom);
+		oppTableBottomIVs[2] = (ImageView)findViewById(R.id.IVOppTable3Bottom);
+		oppTableBottomIVs[3] = (ImageView)findViewById(R.id.IVOppTable4Bottom);
 
 		for(int i=0; i<8; i++)
 		{
 			myHandIVs[i].setOnClickListener(this);
-			if (i<4) { myTableIVs[i].setOnClickListener(this); }
+			if (i<4) { myTableTopIVs[i].setOnClickListener(this); }
 		}
 
 		myPlayedIV = (ImageView)findViewById(R.id.IVPlay1);
 		oppPlayedIV = (ImageView)findViewById(R.id.IVPlay2);
 		trumpsIV = (ImageView)findViewById(R.id.IVTrumps);
+
+		trumpPickerView = findViewById(R.id.trump_picker);
+		playRowNormal   = findViewById(R.id.play_row_normal);
+
+		suitIVs = new ImageView[4];
+		suitIVs[0] = (ImageView)findViewById(R.id.IVSuit0);
+		suitIVs[1] = (ImageView)findViewById(R.id.IVSuit1);
+		suitIVs[2] = (ImageView)findViewById(R.id.IVSuit2);
+		suitIVs[3] = (ImageView)findViewById(R.id.IVSuit3);
+
+		for (int i = 0; i < 4; i++)
+		{
+			final int suit = i;
+			suitIVs[i].setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) { onTrumpSuitChosen(suit); }
+			});
+		}
 	}
 
 	public void newGame()
 	{
 		Card.resetUnusedCardIds();
 
-		myHand = new Hand(myHandIVs, myTableIVs, true);
-		oppHand = new Hand(oppHandIVs, oppTableIVs, false);
+		myHand = new Hand(myHandIVs, myTableTopIVs, myTableBottomIVs, true);
+		oppHand = new Hand(oppHandIVs, oppTableTopIVs, oppTableBottomIVs, false);
 
 		myScore = 0;
 		oppScore = 0;
-		/*
-		Card c= new Card();
-		ImageView iv = (ImageView)findViewById(R.id.IVPlay1);
 
-		int id=res.getIdentifier(c.getResourceName(), "drawable", getPackageName());
-		iv.setImageDrawable(res.getDrawable(id));
-		*/
+		// Reset played-card area
+		myPlayedCard = null;
+		oppPlayedCard = null;
+		myPlayedIV.setImageDrawable(Card.getCardBlank());
+		oppPlayedIV.setImageDrawable(Card.getCardBlank());
 
+		// Reset trump-picker state
+		choosingTrumps = false;
+		trumpPickerView.setVisibility(View.GONE);
+		playRowNormal.setVisibility(View.VISIBLE);
 
+		// Randomly decide who picks trumps.
+		// The player who does NOT choose trumps leads the first trick.
 		Random rnd = new Random();
+		if (rnd.nextBoolean())
+			aiChoosesTrumps();
+		else
+			playerChoosesTrumps();
+	}
 
-		//TODO trump suit choice
-		setTrumpSuit(rnd.nextInt(4));
+	private void aiChoosesTrumps()
+	{
+		int suit = ai.chooseTrumps();
+		setTrumpSuit(suit);
+		Toast.makeText(this, "Opponent chose " + SUIT_NAMES[suit] + " as trumps", Toast.LENGTH_LONG).show();
 
-		setTurn(rnd.nextBoolean());
-		setLead(getTurn());
+		// Player leads the first trick
+		setLead(true);
+		setTurn(true);
+	}
 
-		if (!myLead)
-		{
-			Card c = ai.lead();
-			oppPlayedCard = c;
-			oppPlayedIV.setImageDrawable(c.getDrawable());
+	private void playerChoosesTrumps()
+	{
+		choosingTrumps = true;
+		playRowNormal.setVisibility(View.GONE);
+		trumpPickerView.setVisibility(View.VISIBLE);
+		// Turn indicator is hidden with play_row_normal; no setTurn() call until choice is made
+	}
 
-			setTurn(true);
-		}
+	private void onTrumpSuitChosen(int suit)
+	{
+		choosingTrumps = false;
+		trumpPickerView.setVisibility(View.GONE);
+		playRowNormal.setVisibility(View.VISIBLE);
 
+		setTrumpSuit(suit);
+		Toast.makeText(this, "You chose " + SUIT_NAMES[suit] + " as trumps", Toast.LENGTH_SHORT).show();
 
+		// AI leads the first trick
+		setLead(false);
+		Card c = ai.lead();
+		oppPlayedCard = c;
+		oppPlayedIV.setImageDrawable(c.getDrawable());
+		setTurn(true);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
