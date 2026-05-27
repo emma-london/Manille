@@ -23,13 +23,12 @@ public class AI
 
     public static Card follow(Card leadCard)
     {
+        Hand hand = ManilleApp.getActivity().getOppHand();
+        ArrayList<Card> list = GameRules.validFollowCards(leadCard, hand);
 
-        ArrayList<Card> list = GameRules.validFollowCards(leadCard);
+        Card c = list.get(new Random().nextInt(list.size()));
 
-        Random rnd = new Random();
-        Card c = list.get(rnd.nextInt(list.size()));
-
-        ManilleApp.getActivity().getOppHand().playCard(c);
+        hand.playCard(c);
 
         return c;
     }

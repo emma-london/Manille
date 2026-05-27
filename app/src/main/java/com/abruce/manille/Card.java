@@ -83,6 +83,18 @@ public class Card implements Comparable<Card>
 		return 0;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof Card)) return false;
+		return this.id == ((Card) obj).id;
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
+	}
+
 	public int getId() { return id; }
 	public int getSuit() { return suit; }
 	public int getRank() { return rank; }

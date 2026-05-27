@@ -25,56 +25,8 @@ public class GameRules
         Card oppPlayed = ma.getoppPlayedCard();
         if (oppPlayed == null) {return true;}
 
-        Hand myHand = ma.getMyHand();
+        return validFollowCards(oppPlayed, ma.getMyHand()).contains(c);
 
-        //Check 1 - either you have to follow suit unless you haven't got any to follow.
-        if (c.getSuit() == oppPlayed.getSuit() )
-        {
-            //OK - we're following suit
-            //Check 2- are we going to win the trick?
-            if (c.getRank() > oppPlayed.getRank())
-            {
-                return true;
-            }
-            else
-            {
-                //Check if there is a winning card in hand
-                if (myHand.getMaxRankBySuit(oppPlayed.getSuit()) > oppPlayed.getRank())
-                {
-                    //Player has a higher ranked card which could win, so this isn't a valid play
-                    return false;
-                }
-                else
-                {
-                    //Player doesn't have anything that could win while following suit
-                    return true;
-                }
-            }
-        }
-        else if (!myHand.checkForSuit(oppPlayed.getSuit()))
-        {
-            //OK - we don't have any of that suit to follow
-            //Check 2 - are we going to win by playing a trump?
-            if (c.getSuit() == ma.getTrumpSuit())
-            {
-                return true;
-            }
-            else if (myHand.checkForSuit(ma.getTrumpSuit()))
-            {
-                //We have a trump which is playable and could win the trick, so we should play that instead
-                return false;
-            }
-            else
-            {
-                //We can't follow suit, and have no trumps so we can't win. It's a valid (but losing) play
-                return true;
-            }
-        }
-        else
-        {
-            //Quit - this card isn't valid.
-            return false;
-        }
 
     }
 
@@ -92,12 +44,11 @@ public class GameRules
         else {return true;}
     }
 
-    public static ArrayList<Card> validFollowCards(Card c)
+    public static ArrayList<Card> validFollowCards(Card c, Hand hand)
     {
         int suit = c.getSuit();
         int rank = c.getRank();
         ManilleActivity ma = ManilleApp.getActivity();
-        Hand hand = ma.getOppHand();
 
         ArrayList<Card> list = new ArrayList<Card>();
         if (hand.checkForSuit(suit))
