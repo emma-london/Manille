@@ -41,13 +41,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Score"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <!-- ====== Opponent hand (8 cards) ====== -->
@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Trumps"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageView
                 android:id="@+id/IVTrumps"
@@ -214,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ToPlay"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageView
                 android:id="@+id/IVTurnMy"

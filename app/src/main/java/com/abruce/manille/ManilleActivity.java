@@ -3,6 +3,8 @@ package com.abruce.manille;
 import java.util.Random;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.res.Resources;
@@ -41,6 +43,9 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 	private int myScore;
 	private int oppScore;
 
+	private AI ai;
+	private int currentDifficulty = 1;  // default: Medium
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -49,23 +54,16 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 
 		Resources res = getResources();
 
-		//iv.setImageResource(getResources().getIdentifier("drawable/card01.png", null, null));
-		//iv.setImageDrawable(getResources().getDrawable(R.drawable.card01));
 		Card.setCardBack(res.getDrawable(R.drawable.cardback));
 		Card.setCardBlank(res.getDrawable(R.drawable.card_blank));
 
 		ManilleApp.setActivity(this);
 
+		ai = AI.create(currentDifficulty);
+
 		setupIVs();
 
 		scoreTV = (TextView)findViewById(R.id.textView2);
-
-		/*
-		Card c= new Card();
-
-		int id=res.getIdentifier(c.getResourceName(), "drawable", getPackageName());
-		iv.setImageDrawable(res.getDrawable(id));
-		*/
 
 	}
 
@@ -160,7 +158,7 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 			}
 			else
 			{
-				oppPlayedCard = AI.follow(myPlayedCard);
+				oppPlayedCard = ai.follow(myPlayedCard);
 				oppPlayedIV.setImageDrawable(oppPlayedCard.getDrawable());
 				oppPlayedIV.invalidate();
 
@@ -218,7 +216,7 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 
 		if (!turn)
 		{
-			Card c = AI.lead();
+			Card c = ai.lead();
 			oppPlayedCard = c;
 			oppPlayedIV.setImageDrawable(c.getDrawable());
 
@@ -301,7 +299,7 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 
 		if (!myLead)
 		{
-			Card c = AI.lead();
+			Card c = ai.lead();
 			oppPlayedCard = c;
 			oppPlayedIV.setImageDrawable(c.getDrawable());
 
@@ -315,11 +313,36 @@ public class ManilleActivity extends Activity implements View.OnClickListener
 		int id = item.getItemId();
 
 		if (id == R.id.new_game) {
-			newGame();
+			showNewGameDialog();
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void showNewGameDialog()
+	{
+		final int[] selected = { currentDifficulty };
+
+		new AlertDialog.Builder(this)
+			.setTitle("New Game")
+			.setSingleChoiceItems(AI.DIFFICULTY_LABELS, selected[0],
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						selected[0] = which;
+					}
+				})
+			.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					currentDifficulty = selected[0];
+					ai = AI.create(currentDifficulty);
+					newGame();
+				}
+			})
+			.setNegativeButton("Cancel", null)
+			.show();
 	}
 
 	public void setTrumpSuit(int suit)
