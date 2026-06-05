@@ -5,6 +5,25 @@ import java.util.ArrayList;
 public class HardAI extends AI
 {
     @Override
+    public int chooseTrumps()
+    {
+        // Pick the suit where the AI's point advantage over the human is greatest.
+        // This prefers suits where we're strong AND avoids suits where the human is strong.
+        // Ties broken randomly.
+        ArrayList<Card> aiCards    = ManilleApp.getActivity().getOppHand().getAvailCards();
+        ArrayList<Card> humanCards = ManilleApp.getActivity().getMyHand().getAvailCards();
+
+        int[] aiPoints    = pointsBySuit(aiCards);
+        int[] humanPoints = pointsBySuit(humanCards);
+
+        int[] netScores = new int[4];
+        for (int i = 0; i < 4; i++)
+            netScores[i] = aiPoints[i] - humanPoints[i];
+
+        return pickMaxSuit(netScores);
+    }
+
+    @Override
     protected Card selectLead(ArrayList<Card> cards)
     {
         int trump = ManilleApp.getActivity().getTrumpSuit();

@@ -90,6 +90,28 @@ public abstract class AI
         return worst;
     }
 
+    /** Sums point values per suit for the given cards. Returns int[4], indexed by suit. */
+    protected int[] pointsBySuit(ArrayList<Card> cards)
+    {
+        int[] totals = new int[4];
+        for (Card c : cards)
+            totals[c.getSuit()] += c.getValue();
+        return totals;
+    }
+
+    /**
+     * Returns the suit index with the highest score.
+     * Breaks ties by picking randomly among the tied suits.
+     */
+    protected int pickMaxSuit(int[] scores)
+    {
+        int max = Integer.MIN_VALUE;
+        for (int s : scores) if (s > max) max = s;
+        ArrayList<Integer> tied = new ArrayList<>();
+        for (int i = 0; i < 4; i++) if (scores[i] == max) tied.add(i);
+        return tied.get(new Random().nextInt(tied.size()));
+    }
+
     /** Lowest ranked card in the list. */
     protected Card lowestRank(ArrayList<Card> cards)
     {

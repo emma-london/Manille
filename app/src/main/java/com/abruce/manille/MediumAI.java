@@ -5,6 +5,15 @@ import java.util.ArrayList;
 public class MediumAI extends AI
 {
     @Override
+    public int chooseTrumps()
+    {
+        // Pick the suit in which the AI has the most point value.
+        // Ties broken randomly.
+        ArrayList<Card> aiCards = ManilleApp.getActivity().getOppHand().getAvailCards();
+        return pickMaxSuit(pointsBySuit(aiCards));
+    }
+
+    @Override
     protected Card selectLead(ArrayList<Card> cards)
     {
         // Currently: return the highest card, preferring the non-trumps
